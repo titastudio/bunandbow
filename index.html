@@ -427,8 +427,9 @@ input[type=checkbox],input[type=radio]{accent-color:var(--leaf);width:18px;heigh
 .acc table{border-collapse:collapse;width:100%;font-size:.9rem}
 .acc td,.acc th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
 .share-row{display:flex;gap:14px;margin-top:14px;font-size:.88rem;align-items:center;flex-wrap:wrap}
-.sticky-atc{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1.5px solid var(--line);z-index:40;padding:10px clamp(16px,4vw,40px) calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:14px;align-items:center;transform:translateY(110%);transition:transform .25s;box-shadow:0 -10px 30px -20px rgba(74,42,18,.5)}
-.sticky-atc.show{transform:none}
+.sticky-atc{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1.5px solid var(--line);z-index:40;padding:10px clamp(16px,4vw,40px) calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:14px;align-items:center;transform:translateY(110%);visibility:hidden;transition:transform .25s,visibility 0s .25s;box-shadow:0 -10px 30px -20px rgba(74,42,18,.5)}
+/* Hidden = invisible, not just slid down: when lifted above the cookie banner, sliding 110% of its own height isn't enough to leave the screen */
+.sticky-atc.show{transform:none;visibility:visible;transition:transform .25s,visibility 0s}
 .sticky-atc .mini{width:48px;height:48px;border-radius:10px;overflow:hidden;flex:none}
 .sticky-atc .mini img{width:100%;height:100%;object-fit:cover}
 .sticky-atc .t{flex:1;min-width:0}
@@ -1137,6 +1138,9 @@ body:has(.sticky-atc.always) .chat-fab{bottom:88px}
 body:has(#consent:not([hidden])) #app{padding-bottom:var(--consent-h,170px)}
 body:has(#consent:not([hidden])) .chat-fab{bottom:calc(var(--consent-h,170px) - 4px)}
 body:has(#consent:not([hidden])) .sticky-atc{bottom:calc(var(--consent-h,170px) - 20px)}
+/* Chat button sits above the add-to-cart bar whenever the bar is showing, so it never covers the buy button */
+body:has(.sticky-atc.show) .chat-fab{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+body:has(#consent:not([hidden])):has(.sticky-atc.show) .chat-fab{bottom:calc(var(--consent-h,170px) + 68px)}
 /* Home: greeting line, in-season row, two promo cards */
 .hero-eyebrow{font-weight:800;font-size:.9rem;letter-spacing:.03em;color:var(--leaf);margin-bottom:8px}
 :root[data-theme="dark"] .hero-eyebrow{color:var(--butter)}
